@@ -52,7 +52,7 @@ def motor_rpm_to_wheel_speed_conversion(motorRPM):
     
     # convert motor RPM to wheel RPM
     xrpGearReduction = 1/48 # ratio of wheel gear to motor gear
-    wheelRPM = motorRPM * xrpGearReduction 
+    wheelRPM = motorRPM / xrpGearReduction 
     
     # convert wheel RP to linear speed in cm/sec
     xrpWheelRadius = 6 # centimeters

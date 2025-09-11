@@ -13,14 +13,28 @@ columnLabels = ["Effort Level", "Left Wheel Linear Speed (cm/s)", "Right Wheel L
 resultsDF = pd.DataFrame(resultsMatrix, rowLabels, columnLabels)
 print(resultsDF)
 
-# Plot data and table
-plt.figure(0)
-plt.plot(resultsDF["Effort Level"], resultsDF["Left Wheel Linear Speed (cm/s)"], marker="o", label = columnLabels[1], color = 'blue') # plot first column Left motor
-plt.plot(resultsDF["Effort Level"], resultsDF["Right Wheel Linear Speed (cm/s)"], marker="o", label = columnLabels[2], color = 'red') # plot second column Right motor
-plt.xlim([0, 1.25])
-plt.xlabel(columnLabels[0])
-plt.ylabel("Wheel Linear Speed (cm/s)")
-plt.title("Lab 2 Part 1 - XRP PWM Effort vs Linear Speed")
-plt.legend()
-plt.grid()
+# Create two subplots: one for the line plot, one for the table
+fig, (ax1, ax2) = plt.subplots(2, 1, gridspec_kw={'height_ratios': [3, 1]})
+
+# Line plot on the first subplot
+ax1.plot(resultsDF["Effort Level"], resultsDF["Left Wheel Linear Speed (cm/s)"], marker="o", label=columnLabels[1], color='blue')
+ax1.plot(resultsDF["Effort Level"], resultsDF["Right Wheel Linear Speed (cm/s)"], marker="o", label=columnLabels[2], color='red')
+ax1.set_xlim([0, 1.25])
+ax1.set_xlabel(columnLabels[0])
+ax1.set_ylabel("Wheel Linear Speed (cm/s)")
+ax1.set_title("Lab 2 Part 1 - XRP PWM Effort vs Linear Speed")
+ax1.legend()
+ax1.grid()
+
+# Hide axes for the table subplot
+ax2.axis('off')
+
+# Add table to the second subplot
+table = ax2.table(cellText=resultsMatrix,
+				  rowLabels=rowLabels,
+				  colLabels=columnLabels,
+				  loc='center',
+				  cellLoc='center')
+
+plt.tight_layout()
 plt.show()
