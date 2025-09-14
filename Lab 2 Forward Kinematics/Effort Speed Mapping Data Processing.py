@@ -4,13 +4,13 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-resultsMatrix = [[0.25, 6911.5032, 6863.1716], [0.5, 10705.584, 10657.25], [0.75, 12373.043, 12276.379], [1.0, 13581.347, 13194.688]]
-
 rowLabels = ["25%", "50%", "75%", "100%"]
 columnLabels = ["Effort Level", "Left Wheel Linear Speed (cm/s)", "Right Wheel Linear Speed (cm/s)"]
 
+csv_filepath = 'C:\Users\jonyl\iCloudDrive\Documents\GitHub\SYSEN5411XRP\Effort_and_Speed_Export.csv'
+
 # Convert to DataFrame for easy processing
-resultsDF = pd.DataFrame(resultsMatrix, rowLabels, columnLabels)
+resultsDF = pd.read_csv(csv_filepath, header=0)
 print(resultsDF)
 
 # Create two subplots: one for the line plot, one for the table
@@ -30,7 +30,7 @@ ax1.grid()
 ax2.axis('off')
 
 # Add table to the second subplot
-table = ax2.table(cellText=resultsMatrix,
+table = ax2.table(cellText=resultsDF.values,
 				  rowLabels=rowLabels,
 				  colLabels=columnLabels,
 				  loc='center',

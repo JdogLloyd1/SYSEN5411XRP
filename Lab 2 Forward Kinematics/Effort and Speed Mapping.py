@@ -1,7 +1,7 @@
 # Lab 2 Part 1 - PWM Effort vs. Linear Speed
 # SYSEN 5411 Fall 2025
 # Author: Jonathan Lloyd
-# Last update: Sept 10, 2025
+# Last update: Sept 14, 2025
 
 # Goal:
 # Plot robot linear speed for 4 values of open loop effort control
@@ -52,15 +52,20 @@ def motor_rpm_to_wheel_speed_conversion(motorRPM):
     
     # convert motor RPM to wheel RPM
     xrpGearReduction = 1/48 # ratio of wheel gear to motor gear
-    wheelRPM = motorRPM / xrpGearReduction 
+    wheelRPM = motorRPM * xrpGearReduction 
     
     # convert wheel RP to linear speed in cm/sec
     xrpWheelRadius = 6 # centimeters
-    linearSpeed = wheelRPM * 2 * math.pi * xrpWheelRadius * 60 # cm/s
+    linearSpeed = wheelRPM * 2 * math.pi * xrpWheelRadius / 60 # cm/s
     
     return linearSpeed
 
 # PROGRAM START
+
+# Blink LED to signal successful boot and program load
+board.led_blink(5) # blink at 5 Hz
+time.sleep(2)
+board.led_off()
 
 # run program for efforts of 0.25, 0.5, 0.75, 1.0
 print("Ready to run 1")
@@ -99,5 +104,14 @@ resultsMatrix.append(runResult100)
 print("Results Matrix")
 print(resultsMatrix)
 
-# DATA PROCESSING NOT POSSIBLE ON MICROPYTHON - RUN ON COMPUTER
-# Copy out resultsMatrix and paste into data processing script, or export to CSV
+# Export resultsMatrix to CSV file
+csv_filename = 'Effort_and_Speed_Export.csv'
+csv_path = csv_filename  # Save in the same folder
+
+with open(csv_path, 'w') as file:
+    # Write header
+    file.write("Effort Level,Left Wheel Linear Speed (cm/s),Right Wheel Linear Speed (cm/s)\n")
+    for row in resultsMatrix:
+        # Convert each value to string and join with commas
+        line = ','.join(str(value) for value in row) + '\n'
+        file.write(line)
