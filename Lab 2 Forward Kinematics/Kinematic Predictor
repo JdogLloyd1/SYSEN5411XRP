@@ -1,0 +1,144 @@
+# Lab 2 Part 2 - Mathematical Predictor for Maneuvers
+# SYSEN 5411 Fall 2025
+# Author: Jonathan Lloyd
+# Last update: Sept 16, 2025
+
+# Goal:
+# Use kinematic equations to predict final position of robot after commanded maneuvers
+
+import math
+
+def linear_velocity(velocity_left, velocity_right):
+    return (velocity_left + velocity_right) / 2
+
+def angular_velocity(velocity_left, velocity_right, wheel_base):
+    return (velocity_right - velocity_left) / wheel_base
+
+def straight_line(v, theta, delta_time):
+    # For straight line motion, both wheels have same velocity 
+    delta_x = v * math.cos(theta) * delta_time
+    delta_y = v * math.sin(theta) * delta_time
+    delta_theta = 0 # because straight line 
+    return [delta_x, delta_y, delta_theta]
+
+def arc_motion(v, w, theta, delta_time):
+    # For arc motion, wheels have different velocities
+    delta_x = (v / w) * (math.sin(theta + w * delta_time) - math.sin(theta))
+    delta_y = -(v / w) * (math.cos(theta + w * delta_time) - math.cos(theta))
+    delta_theta = w * delta_time
+    return [delta_x, delta_y, delta_theta]
+
+def maneuver_one(B):
+    # Maneuver 1
+    # Both wheels forward 4 cm/s for 5 sec
+    x1 = 0.0
+    y1 = 0.0
+    theta1 = 0.0 # initial orientation
+    v1_left = 4.0
+    v1_right = 4.0
+    t1 = 5.0
+
+    v1 = linear_velocity(v1_left, v1_right)
+    w1 = angular_velocity(v1_left, v1_right, B)
+    delta_x1, delta_y1, delta_theta1 = straight_line(v1, theta1, t1)
+    x2 = x1 + delta_x1
+    y2 = y1 + delta_y1
+    theta2 = theta1 + delta_theta1
+
+    print(f"Maneuver 1 Step 1 - Straight Line")
+    print(f"Final Position: x = {x2:.2f} cm, y = {y2:.2f} cm, theta = {math.degrees(theta2):.2f} degrees")
+
+    # Left wheel forward 1 cm/s, Right wheel backward 1 cm/s for 2 sec
+    v2_left = 1.0
+    v2_right = -1.0
+    t2 = 2.0
+
+    v2 = linear_velocity(v2_left, v2_right)
+    w2 = angular_velocity(v2_left, v2_right, B)
+    delta_x2, delta_y2, delta_theta2 = arc_motion(v2, w2, theta2, t2)
+    x3 = x2 + delta_x2
+    y3 = y2 + delta_y2
+    theta3 = theta2 + delta_theta2
+
+    print(f"Maneuver 1 Step 2 - In-Place Rotation")
+    print(f"Final Position: x = {x3:.2f} cm, y = {y3:.2f} cm, theta = {math.degrees(theta3):.2f} degrees")
+
+    # Both wheels backward at 6 cm/s for 3 sec
+    v3_left = -6.0
+    v3_right = -6.0
+    t3 = 3.0
+
+    v3 = linear_velocity(v3_left, v3_right)
+    w3 = angular_velocity(v3_left, v3_right, B)
+    delta_x3, delta_y3, delta_theta3 = straight_line(v3, theta3, t3)
+    x4 = x3 + delta_x3
+    y4 = y3 + delta_y3
+    theta4 = theta3 + delta_theta3
+
+    print(f"Maneuver 1 Step 3 - Straight Line Backward")
+    print(f"Final Position: x = {x4:.2f} cm, y = {y4:.2f} cm, theta = {math.degrees(theta4):.2f} degrees") 
+
+    return x4, y4, math.degrees(theta4)
+
+
+def maneuver_two(B):
+    # Maneuver 2
+    # Left wheel 3 cm/s, Right wheel 5 cm/s for 6 sec
+    x1 = 0.0
+    y1 = 0.0
+    theta1 = 0.0 # initial orientation
+    v1_left = 3.0
+    v1_right = 5.0
+    t1 = 6.0
+
+    v1 = linear_velocity(v1_left, v1_right)
+    w1 = angular_velocity(v1_left, v1_right, B)
+    delta_x1, delta_y1, delta_theta1 = arc_motion(v1, w1, theta1, t1)
+    x2 = x1 + delta_x1  
+    y2 = y1 + delta_y1
+    theta2 = theta1 + delta_theta1
+    print(f"Maneuver 2 Step 1 - Arc Motion")
+    print(f"Final Position: x = {x2:.2f} cm, y = {y2:.2f} cm, theta = {math.degrees(theta2):.2f} degrees")
+
+    # Left wheel 5 cm/s, Right wheel 6 cm/s for 6 sec
+    v2_left = 5.0
+    v2_right = 6.0
+    t2 = 6.0
+
+    v2 = linear_velocity(v2_left, v2_right)
+    w2 = angular_velocity(v2_left, v2_right, B)
+    delta_x2, delta_y2, delta_theta2 = arc_motion(v2, w2, theta2, t2)
+    x3 = x2 + delta_x2
+    y3 = y2 + delta_y2
+    theta3 = theta2 + delta_theta2
+
+    print(f"Maneuver 2 Step 2 - Arc Motion")
+    print(f"Final Position: x = {x3:.2f} cm, y = {y3:.2f} cm, theta = {math.degrees(theta3):.2f} degrees")
+
+    return x3, y3, math.degrees(theta3)
+
+# Define robot parameters
+B = 15.0 # cm, wheelbase distance between left and right wheels
+
+# Run Maneuvers
+mx1, my1, mth1 = maneuver_one(B)
+print()
+mx2, my2, mth2 = maneuver_two(B)
+
+# Calculate errors compared to actual robot runs
+# Actual final positions from robot runs (example values, replace with actuals)
+actual_x1, actual_y1, actual_th1 = 6, 0, 0
+actual_x2, actual_y2, actual_th2 = 30.19, 43.93, 55.5
+
+print()
+# Calculate and print errors for Maneuver 1
+error_x1 = (mx1 - actual_x1) / mx1 * 100  # percentage error
+error_y1 = (my1 - actual_y1)  / my1 * 100  # percentage error
+error_th1 = (mth1 - actual_th1) / mth1 * 100  # percentage error
+print(f"Maneuver 1 Errors - Δx: {error_x1:.2f}%, Δy: {error_y1:.2f}%, Δθ: {error_th1:.2f}%")
+
+# Calculate and print errors for Maneuver 2 
+error_x2 = (mx2 - actual_x2) / mx2 * 100  # percentage error
+error_y2 = (my2 - actual_y2)  / my2 * 100  # percentage error
+error_th2 = (mth2 - actual_th2) / mth2 * 100  # percentage error
+print(f"Maneuver 2 Errors - Δx: {error_x2:.2f}%, Δy: {error_y2:.2f}%, Δθ: {error_th2:.2f}%")

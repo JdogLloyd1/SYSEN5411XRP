@@ -1,5 +1,12 @@
+# Lab 2 Part 1 - PWM Effort vs. Linear Speed
+# SYSEN 5411 Fall 2025
+# Author: Jonathan Lloyd
+# Last update: Sept 14, 2025
 
-# Data Processing
+# Goal:
+# Data Processing of CSV export from Lab 2 Part 1
+# Create line plot of Effort vs Linear Speed for both wheels
+# Create table of results below plot
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -7,7 +14,7 @@ import matplotlib.pyplot as plt
 rowLabels = ["25%", "50%", "75%", "100%"]
 columnLabels = ["Effort Level", "Left Wheel Linear Speed (cm/s)", "Right Wheel Linear Speed (cm/s)"]
 
-csv_filepath = 'C:\Users\jonyl\iCloudDrive\Documents\GitHub\SYSEN5411XRP\Effort_and_Speed_Export.csv'
+csv_filepath = "c:\\Users\\jonyl\\iCloudDrive\\Documents\\GitHub\\SYSEN5411XRP\\Lab 2 Forward Kinematics\\Effort_and_Speed_Export.csv"
 
 # Convert to DataFrame for easy processing
 resultsDF = pd.read_csv(csv_filepath, header=0)
@@ -35,6 +42,8 @@ table = ax2.table(cellText=resultsDF.values,
 				  colLabels=columnLabels,
 				  loc='center',
 				  cellLoc='center')
+table.auto_set_font_size(False)
+table.set_fontsize(18)  # Set font size to 18 pt
 
 plt.tight_layout()
 plt.show()
