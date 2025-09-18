@@ -8,6 +8,11 @@
 
 import math
 
+# Coordinate System Conventions
+# x axis is forward direction of robot
+# y axis is left direction of robot
+# theta is the orientation of the robot (0 degrees is forward)  
+
 def linear_velocity(velocity_left, velocity_right):
     return (velocity_left + velocity_right) / 2
 
@@ -118,7 +123,7 @@ def maneuver_two(B):
     return x3, y3, math.degrees(theta3)
 
 # Define robot parameters
-B = 15.0 # cm, wheelbase distance between left and right wheels
+B = 15.5 # cm, wheelbase distance between left and right wheels
 
 # Run Maneuvers
 mx1, my1, mth1 = maneuver_one(B)
@@ -142,3 +147,4 @@ error_x2 = (mx2 - actual_x2) / mx2 * 100  # percentage error
 error_y2 = (my2 - actual_y2)  / my2 * 100  # percentage error
 error_th2 = (mth2 - actual_th2) / mth2 * 100  # percentage error
 print(f"Maneuver 2 Errors - Δx: {error_x2:.2f}%, Δy: {error_y2:.2f}%, Δθ: {error_th2:.2f}%")
+print()

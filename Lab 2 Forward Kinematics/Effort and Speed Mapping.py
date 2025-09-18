@@ -1,7 +1,7 @@
 # Lab 2 Part 1 - PWM Effort vs. Linear Speed
 # SYSEN 5411 Fall 2025
 # Author: Jonathan Lloyd
-# Last update: Sept 14, 2025
+# Last update: Sept 16, 2025
 
 # Goal:
 # Plot robot linear speed for 4 values of open loop effort control
@@ -22,7 +22,8 @@ def open_loop_effort_run(effort):
     drivetrain.set_effort(effort, effort)
     time.sleep(1) # allow robot to steady state velocity
     
-    # Sample both wheel speeds in RPM to create average 
+    # Sample both wheel speeds in RPM to create average
+    # get_speed() already includes the gear reduction conversion
     speedSampleVectorLeft = []
     speedSampleVectorRight = []
     for i in range(10): # 10 samples
@@ -48,15 +49,11 @@ def open_loop_effort_run(effort):
     return [effort, averageLinearLeft, averageLinearRight]
     
 # Conversion Function 
-def motor_rpm_to_wheel_speed_conversion(motorRPM):
-    
-    # convert motor RPM to wheel RPM
-    xrpGearReduction = 1/48 # ratio of wheel gear to motor gear
-    wheelRPM = motorRPM * xrpGearReduction 
-    
+def motor_rpm_to_wheel_speed_conversion(RPM):
+        
     # convert wheel RP to linear speed in cm/sec
-    xrpWheelRadius = 6 # centimeters
-    linearSpeed = wheelRPM * 2 * math.pi * xrpWheelRadius / 60 # cm/s
+    xrpWheelDiameter = drivetrain.wheel_diam # centimeters
+    linearSpeed = RPM * math.pi * xrpWheelDiameter / 60 # cm/s
     
     return linearSpeed
 
@@ -115,3 +112,6 @@ with open(csv_path, 'w') as file:
         # Convert each value to string and join with commas
         line = ','.join(str(value) for value in row) + '\n'
         file.write(line)
+
+# Set board light to green to signify code complete
+board.set_rgb_led(0,255,0) # range 0-255 for each r,g,b
