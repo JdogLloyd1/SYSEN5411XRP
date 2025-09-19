@@ -1,0 +1,78 @@
+# Lab 3 - Waypoints
+# SYSEN 5411 Fall 2025
+# Author: Jonathan Lloyd
+# Last update: Sept 18, 2025
+
+
+# Goal:
+# Demonstrate waypoint navigation algorithm
+
+from XRPLib.defaults import * # Initializes board, motors, servo, and sensors
+import time
+import math
+
+from Inverse_Kinematic_XRP_Commands import tst_algorithm
+# tst_algorithm(final_position)
+from circle_algorithm import *
+# normalize_deg(deg)
+# generate_circle_path(n_points, radius_cm, closed=True, ccw=True)
+
+
+# define main algorithm
+def waypoint_nav(circle_points, circle_radius)
+    
+    # Use the TST algorithm combined with generate_circle_path
+    # to create smooth paths between start point and target point
+    
+    # Create circle path
+    waypoints = generate_circle_path(circle_points, circle_radius,
+                                     closed=True, ccw=True)
+    
+    # Feed circle path step by step to TST algorithm
+    distance_traveled = 0 # centimeters, running tally of commanded distance
+    x_prev = 0
+    y_prev = 0
+    for x, y, theta in waypoints:
+        # Pass next target to TST algorithm
+        target_vector = [x, y, theta]
+        tst_algorithm(target_vector) # move robot
+        
+        # Delta distance and update counter
+        d_segment = math.sqrt((x-x_prev)^2 + (y-y_prev)^2)
+        distance_traveled = distance_traveled + d_segment
+        
+        # Set n-1 point
+        x_prev = x
+        y_prev = y
+    
+    return distance_traveled
+    
+
+# PROGRAM START
+
+# Blink LED to signal successful boot and program load
+board.led_blink(5) # blink at 5 Hz
+time.sleep(2)
+board.led_off()
+
+# Define number of circle points
+N_circle = 4
+# N_circle = 8
+# N_circle = 12
+
+# Define circle radius
+radius = 10 # cm
+
+# Drive
+print("Ready to run")
+board.wait_for_button() # wait to run code until USER button is pressed
+time.sleep(1)
+commandedDistanceTraveled = waypoint_nav(N_circle, radius)
+
+with open("timer_log.txt", "w") as f:
+    f.write("Commanded Distance Traveled: \n")
+    f.write(commandedDistanceTraveled)
+    f.write("\n")
+    
+# Set board light to green to signify code complete
+board.set_rgb_led(0,255,0) # range 0-255 for each r,g,b
