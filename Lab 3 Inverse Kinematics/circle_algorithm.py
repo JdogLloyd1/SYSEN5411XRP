@@ -26,7 +26,7 @@ def generate_circle_path(n_points, radius_cm, closed=True, ccw=True):
         list[(float, float, float)]: (x, y, theta_deg) tuples.
     """
     if n_points <= 0:
-    return []
+        return []
 
     # Circle center such that start/end is (0,0,0)
     cx, cy = 0.0, float(radius_cm)
@@ -44,7 +44,7 @@ def generate_circle_path(n_points, radius_cm, closed=True, ccw=True):
         x0 = cx + radius_cm * math.cos(phi0)
         y0 = cy + radius_cm * math.sin(phi0)
         theta0 = normalize_deg(math.degrees(phi0 + (math.pi/2.0)))
-    return [(x0, y0, theta0)]
+        return [(x0, y0, theta0)]
         
     dphi = total_span / steps
     if not ccw:

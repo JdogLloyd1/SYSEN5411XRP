@@ -1,0 +1,6 @@
+Target Vector: 
+[25, 15, 90]
+STST Timer: 
+6
+TST Timer: 
+5

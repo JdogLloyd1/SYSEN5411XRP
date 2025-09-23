@@ -11,7 +11,7 @@ from XRPLib.defaults import * # Initializes board, motors, servo, and sensors
 import time
 import math
 
-from Inverse_Kinematic_XRP_Commands import tst_algorithm
+from Inverse_Kinematic_Algorithms import tst_algorithm
 # tst_algorithm(final_position)
 from circle_algorithm import *
 # normalize_deg(deg)
@@ -19,7 +19,7 @@ from circle_algorithm import *
 
 
 # define main algorithm
-def waypoint_nav(circle_points, circle_radius)
+def waypoint_nav(circle_points, circle_radius):
     
     # Use the TST algorithm combined with generate_circle_path
     # to create smooth paths between start point and target point
@@ -38,14 +38,14 @@ def waypoint_nav(circle_points, circle_radius)
         tst_algorithm(target_vector) # move robot
         
         # Delta distance and update counter
-        d_segment = math.sqrt((x-x_prev)^2 + (y-y_prev)^2)
+        d_segment = math.sqrt((x-x_prev)**2 + (y-y_prev)**2)
         distance_traveled = distance_traveled + d_segment
         
         # Set n-1 point
         x_prev = x
         y_prev = y
     
-    return distance_traveled
+    return waypoints, distance_traveled
     
 
 # PROGRAM START
@@ -61,18 +61,22 @@ N_circle = 4
 # N_circle = 12
 
 # Define circle radius
-radius = 10 # cm
+radius = 30 # cm
 
 # Drive
-print("Ready to run")
+print("Ready to run Waypoint Algorithm")
 board.wait_for_button() # wait to run code until USER button is pressed
 time.sleep(1)
-commandedDistanceTraveled = waypoint_nav(N_circle, radius)
+exportWaypoints, commandedDistanceTraveled = waypoint_nav(N_circle, radius)
 
-with open("timer_log.txt", "w") as f:
+with open('waypoint_log_N' + str(N_circle) + '_points.txt', 'w') as f:
     f.write("Commanded Distance Traveled: \n")
-    f.write(commandedDistanceTraveled)
-    f.write("\n")
+    f.write(f'{commandedDistanceTraveled}\n')
+    f.write("Commanded Waypoints: \n")
+    f.write(f'{exportWaypoints}')
     
 # Set board light to green to signify code complete
 board.set_rgb_led(0,255,0) # range 0-255 for each r,g,b
+
+
+
