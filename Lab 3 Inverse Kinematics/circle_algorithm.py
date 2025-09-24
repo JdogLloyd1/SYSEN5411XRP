@@ -36,8 +36,8 @@ def generate_circle_path(n_points, radius_cm, closed=True, ccw=True):
     
     # How many steps along the circle?
     # If closed, we want to include both start and
-    # end (same point) -> n_points-1 intervals.
-    steps = n_points - 1 if closed and n_points > 1 else n_points - 1
+    # end (same point) -> n_points intervals.
+    steps = n_points if closed and n_points > 1 else n_points - 1
     total_span = 2.0 * math.pi # full circle
     if steps <= 0:
         # Degenerate cases (n_points=1)
