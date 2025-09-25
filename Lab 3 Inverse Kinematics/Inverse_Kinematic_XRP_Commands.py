@@ -13,7 +13,7 @@ import math
 
 from Inverse_Kinematic_Algorithms import *
 # stst_algorithm(final_position)
-# tst_algorithm(final_position)
+# tst_algorithm(final_position, current_heading)
     
 # PROGRAM START
 
@@ -44,7 +44,7 @@ board.led_off()
 print("Ready to run TST")
 board.wait_for_button() # wait to run code until USER button is pressed
 time.sleep(1)
-tst_timer = tst_algorithm(target_vector)
+tst_timer = tst_algorithm(target_vector, current_heading=0)
 
 board.led_blink(5) # blink at 5 Hz
 time.sleep(2)

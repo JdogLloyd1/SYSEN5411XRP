@@ -16,7 +16,7 @@ def stst_algorithm(final_position):
     
     start_clock = time.time() # start timer
     
-    # Coordinate system: +x right, +y forward, theta CCW from +y
+    # Coordinate system: +x right, +y forward, theta CCW from +x
     # Initial condition: (0, 0, 0)
     
     x_final = final_position[0]
@@ -62,11 +62,11 @@ def stst_algorithm(final_position):
     runtime = end_clock - start_clock
     return runtime
     
-def tst_algorithm(final_position):
+def tst_algorithm(final_position, current_heading):
     
     start_clock = time.time() # start timer
     
-    # Coordinate system: +x right, +y forward, theta CCW from +y
+    # Coordinate system: +x right, +y forward, theta CCW from +x
     # Initial condition: (0, 0, 0)
 
     x_final = final_position[0]
@@ -75,8 +75,8 @@ def tst_algorithm(final_position):
     
     # 1. Turn to face the target
     alpha_wrtx = math.degrees(math.atan2(y_final, x_final)) # degrees relative to +x
-    alpha_turn = (alpha_wrtx - 90 +180) % 360 - 180 # transform to wrt +y, normalize to [-180, 180]
-    drivetrain.turn(turn_degrees=alpha_turn)
+    alpha_turn = (alpha_wrtx - current_heading +180) % 360 - 180 # delta turn, normalize to [-180, 180]
+    drivetrain.turn(turn_degrees=alpha_turn) 
     
     # 2. Straight to target
     distance_target = math.sqrt(x_final**2 + y_final**2)
@@ -90,37 +90,3 @@ def tst_algorithm(final_position):
     end_clock = time.time() # end timer
     runtime = end_clock - start_clock
     return runtime
-
-def tst_algorithm_global(final_position, current_position):
-    
-    # Coordinate system: +x right, +y forward, theta CCW from +y
-    # Initial condition: (0, 0, 0)
-
-    x_final = final_position[0]
-    y_final = final_position[1]
-    theta_final = final_position[2]   
-    
-    x_current = current_position[0]
-    y_current = current_position[1]
-    theta_current = current_position[2]
-
-    x_delta = x_final - x_current
-    y_delta = y_final - y_current
-    theta_delta = theta_final - theta_current
-    # print(x_delta, y_delta, theta_delta)
-    
-    # 1. Turn to face the target
-    alpha_wrtx = math.degrees(math.atan2(y_delta, x_delta)) # degrees relative to +x
-    alpha_turn = (alpha_wrtx - 90 +180) % 360 - 180 # transform to wrt +y, normalize to [-180, 180]
-    # print("Turn angle 1: ", alpha_turn)
-    drivetrain.turn(turn_degrees=alpha_turn)
-    
-    # 2. Straight to target
-    distance_target = math.sqrt(x_delta**2 + y_delta**2)
-    # print("Distance: ", distance_target)
-    drivetrain.straight(distance=distance_target)
-    
-    # 3. Turn to final heading
-    beta_turn = (theta_final - alpha_turn +180) % 360 - 180 # normalize to [-180, 180]
-    # print("Turn angle 2: ", beta_turn)
-    drivetrain.turn(turn_degrees=beta_turn)
