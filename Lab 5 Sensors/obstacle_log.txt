@@ -1,0 +1,3 @@
+Obstacle detected, exiting TST
+Median reading: 16.08247
+Distance Target: 70.71068
