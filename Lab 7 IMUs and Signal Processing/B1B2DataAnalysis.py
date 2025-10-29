@@ -186,4 +186,4 @@ def analyze_and_plot(b1_csv='B1_gyro_log.csv', b2_csv='B2_gyro_drift_with_cal.cs
 if __name__ == '__main__':
 	# Default run: create plots and print RMS summaries. If running in CI/headless,
 	# set MATPLOTLIB_BACKEND=Agg or call with save_figs=True to write PNGs instead of showing.
-	analyze_and_plot(save_figs=True)
+	analyze_and_plot(save_figs=False)

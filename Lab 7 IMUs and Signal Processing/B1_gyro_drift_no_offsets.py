@@ -13,8 +13,6 @@ from machine import Timer
 import os
 
 # Define loop function
-
-# Define loop function
 def data_recording():
     
     # Record 30 seconds of data at 200 Hz
@@ -31,8 +29,8 @@ def data_recording():
         for _ in range(200*30): # 30 sec @ 200 Hz
             ax, ay, az = imu.get_acc_rates()
             roll_acc, pitch_acc = compute_roll_pitch(ax, ay, az)
-            gyro_int_roll = imu.get_roll() / 1000.0 # convert mdps to deg
-            gyro_int_pitch = imu.get_pitch() / 1000.0 # convert mdps to deg             
+            gyro_int_roll = imu.get_roll() # already in deg
+            gyro_int_pitch = imu.get_pitch() # already in deg           
             t_ms = time.ticks_diff(time.ticks_ms(), t0)
             f.write("%d,%d,%d,%d,%.3f,%.3f,%.3f,%.3f\n" % (t_ms, ax, ay, az, roll_acc,
             pitch_acc, gyro_int_roll, gyro_int_pitch))
