@@ -1,0 +1,21 @@
+Run Start 
+
+Nominal distance = 8 cm
+Mu = 8.210825 cm
+Var = 5.790614e-05 cm
+
+Nominal distance = 23 cm
+Mu = 23.12148 cm
+Var = 7.224156e-05 cm
+
+Nominal distance = 61 cm
+Mu = 58.38668 cm
+Var = 0.008134142 cm
+
+Nominal distance = 102 cm
+Mu = 98.85089 cm
+Var = 0.0389306 cm
+
+Nominal distance = 170 cm
+Mu = 166.9848 cm
+Var = 0.03140496 cm
