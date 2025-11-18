@@ -1,3 +1,11 @@
+# Lab 8 - 1D Kalman Filter
+# SYSEN 5411 Fall 2025
+# Author: Jonathan Lloyd
+# Last update: November 8, 2025
+
+# Goal:
+# Analyze & Plot Wall Follow Data with a 1D Kalman Filter
+
 import matplotlib.pyplot as plt
 import csv
 import numpy as np
@@ -15,7 +23,7 @@ left_encoders = []
 right_encoders = []
 rangefinder_distances = []
 # Read data from data.csv
-with open('data.csv', 'r') as csvfile:
+with open('Lab 8 Kalman Filtering\\data.csv', 'r') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         if len(row) < 4:
@@ -36,7 +44,7 @@ with open('data.csv', 'r') as csvfile:
 avg_encoders = [(l + r) / 2 for l, r in zip(left_encoders,
 right_encoders)]
 # Adjust rangefinder distances to be relative to the starting position
-rangefinder_distances = [rangefinder_distances[0] - d for d in
+rangefinder_distances = [d - rangefinder_distances[0] for d in
 rangefinder_distances]
 
 
@@ -114,11 +122,11 @@ for i in range(1, len(time_stamps)):
     P = P + process_noises[i]
     # Update step with rangefinder measurement
     z = rangefinder_distances[i]
-    # TODO: Calculate the Kalman gain
+    # Calculate the Kalman gain
     K = P / (P + sensor_noises[i])
-    # TODO: Update the estimate with the Kalman gain
+    # Update the estimate with the Kalman gain
     x_est = x_prior + K * (z - x_prior)
-    # TODO: Update the estimate variance with the Kalman gain
+    # Update the estimate variance with the Kalman gain
     P = (1 - K) * P
 
     filtered_positions.append(x_est)
@@ -139,7 +147,7 @@ plt.xlabel("Time (s)")
 plt.legend()
 plt.title("Average Encoder Position and Rangefinder Distance vs. Time")
 
-plt.savefig('data_plot_matplotlib.png')
+# plt.savefig('data_plot_matplotlib.png')
 # Uncomment this to show the plot in a new window
 plt.show()
 
